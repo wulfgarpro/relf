@@ -29,11 +29,11 @@ typedef struct {
 } Relf_E_Ident;
 
 typedef struct {
-  Relf_E_Ident e_ident;
-  uint16_t e_type;
-  uint16_t e_machine;
-  uint32_t e_version;
-  uint64_t e_entry;
+  Relf_E_Ident e_ident; /* 16 */
+  uint16_t e_type;      /* 24 */
+  uint16_t e_machine;   /* 32 */
+  uint32_t e_version;   /* 40 */
+  uint64_t e_entry;     /* 48 */
   uint64_t e_phoff;
   uint64_t e_shoff;
   uint32_t e_flags;
@@ -43,7 +43,6 @@ typedef struct {
   uint16_t e_shentsize;
   uint16_t e_shnum;
   uint16_t e_shstrndx;
-
 } Relf_Elf64_Ehdr;
 
 typedef struct {
@@ -53,6 +52,17 @@ typedef struct {
     // Relf_Elf32_Ehdr elf32_ehdr;
   } ehdr;
 } Relf_Elf_Ehdr;
+
+typedef struct {
+  uint32_t p_type;
+  uint32_t p_flags;
+  uint64_t p_offset;
+  uint64_t p_vaddr;
+  uint64_t p_paddr;
+  uint64_t p_filesz;
+  uint64_t p_memsz;
+  uint64_t p_align;
+} Relf_Elf64_Phdr;
 
 int relf_is_valid_elf_magic(const Relf_E_Ident *e_ident);
 Relf_E_Class relf_determine_elf_class(const Relf_E_Ident *e_ident);
