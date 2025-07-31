@@ -4,6 +4,12 @@
 
 #define EI_NIDENT 16 /* Number of bytes in e_ident. */
 
+typedef enum {
+  RELF_CLASS_NONE = 0,
+  RELF_E_CLASS_32 = 1,
+  RELF_E_CLASS_64 = 2
+} Relf_E_Class;
+
 enum {
   EI_MAG0 = 0,    /* Magic number: 0x7F */
   EI_MAG1 = 1,    /* Magic number: 0x45 (E) */
@@ -18,11 +24,25 @@ enum {
 };
 
 typedef struct {
-  unsigned char e_ident[EI_NIDENT];
+  uint8_t e_ident[EI_NIDENT];
+} Relf_E_Ident;
+
+typedef struct {
+  Relf_E_Ident e_ident;
   uint16_t e_type;
   uint16_t e_machine;
   uint32_t e_version;
   // TODO: Add more fields.
 } Relf_Elf64_Ehdr;
 
+typedef struct {
+  Relf_E_Class relf_e_class;
+  union {
+    Relf_Elf64_Ehdr elf64_ehdr;
+    // Relf_Elf32_Ehdr elf32_ehdr;
+  } ehdr;
+} Relf_Elf_Ehdr;
+
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr);
+int relf_is_valid_elf_magic(const Relf_E_Ident *e_ident);
+Relf_E_Class relf_determine_elf_class(const Relf_E_Ident *e_ident);
