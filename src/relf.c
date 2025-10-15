@@ -2,13 +2,13 @@
 #include <stdint.h>
 #include <stdio.h>
 
-int relf_is_valid_elf_magic(const Relf_E_Ident *e_ident) {
+bool relf_has_valid_magic(const Relf_E_Ident *e_ident) {
   const uint8_t *ident = e_ident->e_ident;
   return ident[EI_MAG0] == 0x7F && ident[EI_MAG1] == 'E' &&
          ident[EI_MAG2] == 'L' && ident[EI_MAG3] == 'F';
 }
 
-Relf_E_Class relf_determine_elf_class(const Relf_E_Ident *e_ident) {
+Relf_E_Class relf_ident_class(const Relf_E_Ident *e_ident) {
   const uint8_t *ident = e_ident->e_ident;
 
   switch (ident[EI_CLASS]) {
@@ -17,11 +17,11 @@ Relf_E_Class relf_determine_elf_class(const Relf_E_Ident *e_ident) {
   case 2:
     return RELF_E_CLASS_64;
   default:
-    return RELF_CLASS_NONE;
+    return RELF_E_CLASS_NONE;
   }
 }
 
-Relf_E_Data relf_determine_elf_data(const Relf_E_Ident *e_ident) {
+Relf_E_Data relf_ident_data(const Relf_E_Ident *e_ident) {
   const uint8_t *ident = e_ident->e_ident;
 
   switch (ident[EI_DATA]) {

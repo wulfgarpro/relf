@@ -25,15 +25,15 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  if (!relf_is_valid_elf_magic(&e_ident)) {
+  if (!relf_has_valid_magic(&e_ident)) {
     fprintf(stderr, "ERROR: invalid ELF file\n");
     fclose(elf_file);
     return EXIT_FAILURE;
   }
 
   Relf_Elf_Ehdr ehdr;
-  ehdr.relf_e_class = relf_determine_elf_class(&e_ident);
-  ehdr.relf_e_data = relf_determine_elf_data(&e_ident);
+  ehdr.relf_e_class = relf_ident_class(&e_ident);
+  ehdr.relf_e_data = relf_ident_data(&e_ident);
 
   rewind(elf_file);
 

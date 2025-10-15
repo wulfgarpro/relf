@@ -1,12 +1,13 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
 // Number of bytes in e_ident.
 #define EI_NIDENT 16
 
 typedef enum {
-  RELF_CLASS_NONE = 0,
+  RELF_E_CLASS_NONE = 0,
   RELF_E_CLASS_32 = 1,
   RELF_E_CLASS_64 = 2
 } Relf_E_Class;
@@ -73,7 +74,7 @@ typedef struct {
   uint64_t p_align;
 } Relf_Elf64_Phdr;
 
-int relf_is_valid_elf_magic(const Relf_E_Ident *e_ident);
-Relf_E_Class relf_determine_elf_class(const Relf_E_Ident *e_ident);
-Relf_E_Data relf_determine_elf_data(const Relf_E_Ident *e_ident);
+bool relf_has_valid_magic(const Relf_E_Ident *ident);
+Relf_E_Class relf_ident_class(const Relf_E_Ident *ident);
+Relf_E_Data relf_ident_data(const Relf_E_Ident *ident);
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr);
