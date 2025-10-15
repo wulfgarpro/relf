@@ -11,7 +11,8 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  FILE *elf_file = fopen(program_name, "rb");
+  const char *path = argv[1];
+  FILE *elf_file = fopen(path, "rb");
   if (!elf_file) {
     perror("fopen");
     return EXIT_FAILURE;
