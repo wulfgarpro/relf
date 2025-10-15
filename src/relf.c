@@ -21,6 +21,19 @@ Relf_E_Class relf_determine_elf_class(const Relf_E_Ident *e_ident) {
   }
 }
 
+Relf_E_Data relf_determine_elf_data(const Relf_E_Ident *e_ident) {
+  const uint8_t *ident = e_ident->e_ident;
+
+  switch (ident[EI_DATA]) {
+  case 1:
+    return RELF_E_DATA_LE;
+  case 2:
+    return RELF_E_DATA_BE;
+  default:
+    return RELF_E_DATA_NONE;
+  }
+}
+
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr) {
   const uint8_t *ident = ehdr->e_ident.e_ident;
   printf("e_ident_ei_mag: 0x%02x 0x%02x 0x%02x 0x%02x\n", ident[EI_MAG0],

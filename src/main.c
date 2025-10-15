@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 
   Relf_Elf_Ehdr ehdr;
   ehdr.relf_e_class = relf_determine_elf_class(&e_ident);
+  ehdr.relf_e_data = relf_determine_elf_data(&e_ident);
 
   rewind(elf_file);
 

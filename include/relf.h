@@ -11,6 +11,12 @@ typedef enum {
   RELF_E_CLASS_64 = 2
 } Relf_E_Class;
 
+typedef enum {
+  RELF_E_DATA_NONE = 0,
+  RELF_E_DATA_LE = 1,
+  RELF_E_DATA_BE = 2,
+} Relf_E_Data;
+
 enum {
   EI_MAG0 = 0,       // Magic number: 0x7F
   EI_MAG1 = 1,       // Magic number: 0x45 (E)
@@ -28,6 +34,7 @@ typedef struct {
   uint8_t e_ident[EI_NIDENT];
 } Relf_E_Ident;
 
+// ELF Header
 typedef struct {
   Relf_E_Ident e_ident; /* 16 */
   uint16_t e_type;      /* 24 */
@@ -46,13 +53,15 @@ typedef struct {
 } Relf_Elf64_Ehdr;
 
 typedef struct {
-  Relf_E_Class relf_e_class;
+  Relf_E_Class relf_e_class; // 32 or 64 bit
+  Relf_E_Data relf_e_data;   // LE or BE
   union {
     Relf_Elf64_Ehdr elf64_ehdr;
     // Relf_Elf32_Ehdr elf32_ehdr;
   } ehdr;
 } Relf_Elf_Ehdr;
 
+// Program Header
 typedef struct {
   uint32_t p_type;
   uint32_t p_flags;
@@ -66,4 +75,5 @@ typedef struct {
 
 int relf_is_valid_elf_magic(const Relf_E_Ident *e_ident);
 Relf_E_Class relf_determine_elf_class(const Relf_E_Ident *e_ident);
+Relf_E_Data relf_determine_elf_data(const Relf_E_Ident *e_ident);
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr);
