@@ -4,7 +4,7 @@
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-  const char *program_name = argv[1];
+  const char *program_name = argv[0];
 
   if (argc <= 1) {
     fprintf(stderr, "Usage: %s <input>\n", program_name);
