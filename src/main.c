@@ -84,13 +84,12 @@ int main(int argc, char *argv[]) {
       goto cleanup;
     }
 
-    for (uint16_t i = 0; i < phnum; i++) {
-      n_bytes_read = fread(&phdr_table.phdrs.elf64_phdr[i], 1,
-                           sizeof(*phdr_table.phdrs.elf64_phdr), elf_file);
-      if (n_bytes_read != sizeof(phdr_table.phdrs.elf64_phdr[i])) {
-        fprintf(stderr, "ERROR: reading 64-bit ELF program header\n");
-        goto cleanup;
-      }
+    size_t n_items_read =
+        fread(phdr_table.phdrs.elf64_phdr, sizeof(*phdr_table.phdrs.elf64_phdr),
+              phnum, elf_file);
+    if (n_items_read != phnum) {
+      fprintf(stderr, "ERROR: reading 64-bit ELF program header\n");
+      goto cleanup;
     }
     break;
   default:
