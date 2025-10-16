@@ -83,6 +83,7 @@ int main(int argc, char *argv[]) {
 
     fseek(fd, ehdr.ehdr.elf64_ehdr.e_phoff, SEEK_SET);
     // TODO: handle error
+    // TODO: handle big files
 
     size_t phnum = ehdr.ehdr.elf64_ehdr.e_phnum;
     phdrtab.phnum = phnum;
@@ -109,6 +110,7 @@ int main(int argc, char *argv[]) {
 
     fseek(fd, ehdr.ehdr.elf64_ehdr.e_shoff, SEEK_SET);
     // TODO: handle error
+    // TODO: handle big files
 
     size_t shnum = ehdr.ehdr.elf64_ehdr.e_shnum;
     shdrtab.shnum = shnum;
