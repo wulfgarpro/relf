@@ -12,6 +12,14 @@ static inline void relf_pht64_free(Relf_Elf64_Phdr_Table *phdr_table) {
   phdr_table->phnum = 0;
 }
 
+static inline void relf_sht64_free(Relf_Elf64_Shdr_Table *shdr_table) {
+  if (!shdr_table)
+    return;
+  free(shdr_table->shdrs.elf64_shdr);
+  shdr_table->shdrs.elf64_shdr = NULL;
+  shdr_table->shnum = 0;
+}
+
 int main(int argc, char *argv[]) {
   int rc = EXIT_FAILURE;
 
@@ -45,6 +53,7 @@ int main(int argc, char *argv[]) {
   ehdr.relf_e_data = relf_ident_data(&ident);
 
   Relf_Elf64_Phdr_Table phdr_table = {0};
+  Relf_Elf64_Shdr_Table shdr_table = {0};
 
   rewind(elf_file);
 
@@ -88,7 +97,33 @@ int main(int argc, char *argv[]) {
         fread(phdr_table.phdrs.elf64_phdr, sizeof(*phdr_table.phdrs.elf64_phdr),
               phnum, elf_file);
     if (n_items_read != phnum) {
-      fprintf(stderr, "ERROR: reading 64-bit ELF program header\n");
+      fprintf(stderr, "ERROR: reading 64-bit ELF program header table\n");
+      goto cleanup;
+    }
+
+    // Read Section Header Table
+    uint16_t shentsize = ehdr.ehdr.elf64_ehdr.e_shentsize;
+    if (shentsize != sizeof(Relf_Elf64_Shdr)) {
+      fprintf(stderr,
+              "ERROR: unexpected 64-bit section header table entry size\n");
+      goto cleanup;
+    }
+
+    fseek(elf_file, ehdr.ehdr.elf64_ehdr.e_shoff, SEEK_SET);
+    // TODO: handle error
+
+    uint16_t shnum = ehdr.ehdr.elf64_ehdr.e_shnum;
+    shdr_table.shnum = shnum;
+    shdr_table.shdrs.elf64_shdr = calloc(shnum, sizeof(Relf_Elf64_Shdr));
+    if (!shdr_table.shdrs.elf64_shdr) {
+      fprintf(stderr, "ERROR: allocating memory for section header table\n");
+      goto cleanup;
+    }
+
+    n_items_read = fread(shdr_table.shdrs.elf64_shdr,
+                         sizeof(*shdr_table.shdrs.elf64_shdr), shnum, elf_file);
+    if (n_items_read != shnum) {
+      fprintf(stderr, "ERROR: reading 64-bit ELF section header table\n");
       goto cleanup;
     }
     break;
@@ -102,15 +137,17 @@ int main(int argc, char *argv[]) {
   } else {
     relf_print_elf64_header(&ehdr.ehdr.elf64_ehdr);
     relf_print_elf64_phdr_table(&phdr_table);
+    relf_print_elf64_shdr_table(&shdr_table);
   }
 
   rc = EXIT_SUCCESS;
 
 cleanup:
-  relf_pht64_free(&phdr_table);
   if (elf_file) {
     fclose(elf_file);
   }
+  relf_pht64_free(&phdr_table);
+  relf_sht64_free(&shdr_table);
 
   return rc;
 }

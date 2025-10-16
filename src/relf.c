@@ -72,3 +72,19 @@ void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table) {
     printf("p_align: 0x%016lx\n", phdr.p_align);
   }
 }
+
+void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdr_table) {
+  for (uint16_t i = 0; i < shdr_table->shnum; i++) {
+    const Relf_Elf64_Shdr shdr = shdr_table->shdrs.elf64_shdr[i];
+    printf("sh_name: 0x%08x\n", shdr.sh_name);
+    printf("sh_type: 0x%08x\n", shdr.sh_type);
+    printf("sh_flags: 0x%016lx\n", shdr.sh_flags);
+    printf("sh_addr: 0x%016lx\n", shdr.sh_addr);
+    printf("sh_offset: 0x%016lx\n", shdr.sh_offset);
+    printf("sh_size: 0x%016lx\n", shdr.sh_size);
+    printf("sh_link: 0x%08x\n", shdr.sh_link);
+    printf("sh_info: 0x%08x\n", shdr.sh_info);
+    printf("sh_addralign: 0x%016lx\n", shdr.sh_addralign);
+    printf("sh_entsize: 0x%016lx\n", shdr.sh_entsize);
+  }
+};

@@ -84,8 +84,33 @@ typedef struct {
   } phdrs;
 } Relf_Elf64_Phdr_Table;
 
+// Section Header
+typedef struct {
+  uint32_t sh_name;      /* 4 */
+  uint32_t sh_type;      /* 8 */
+  uint64_t sh_flags;     /* 16 */
+  uint64_t sh_addr;      /* 24 */
+  uint64_t sh_offset;    /* 32 */
+  uint64_t sh_size;      /* 40 */
+  uint32_t sh_link;      /* 44 */
+  uint32_t sh_info;      /* 48 */
+  uint64_t sh_addralign; /* 56 */
+  uint64_t sh_entsize;   /* 64 */
+
+} Relf_Elf64_Shdr;
+
+// Section Header
+typedef struct {
+  uint16_t shnum;
+  union {
+    Relf_Elf64_Shdr *elf64_shdr;
+    // Relf_Elf32_Shdr* elf32_shdr;
+  } shdrs;
+} Relf_Elf64_Shdr_Table;
+
 bool relf_has_valid_magic(const Relf_E_Ident *ident);
 Relf_E_Class relf_ident_class(const Relf_E_Ident *ident);
 Relf_E_Data relf_ident_data(const Relf_E_Ident *ident);
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr);
 void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table);
+void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdr_table);
