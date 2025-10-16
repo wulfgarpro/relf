@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 // Number of bytes in e_ident.
@@ -38,19 +39,19 @@ typedef struct {
 // ELF Header
 typedef struct {
   Relf_E_Ident e_ident; /* 16 */
-  uint16_t e_type;      /* 24 */
-  uint16_t e_machine;   /* 32 */
-  uint32_t e_version;   /* 40 */
-  uint64_t e_entry;     /* 48 */
-  uint64_t e_phoff;
-  uint64_t e_shoff;
-  uint32_t e_flags;
-  uint16_t e_ehsize;
-  uint16_t e_phentsize;
-  uint16_t e_phnum;
-  uint16_t e_shentsize;
-  uint16_t e_shnum;
-  uint16_t e_shstrndx;
+  uint16_t e_type;      /* 18 */
+  uint16_t e_machine;   /* 20 */
+  uint32_t e_version;   /* 24 */
+  uint64_t e_entry;     /* 32 */
+  uint64_t e_phoff;     /* 40 */
+  uint64_t e_shoff;     /* 48 */
+  uint32_t e_flags;     /* 52 */
+  uint16_t e_ehsize;    /* 54 */
+  uint16_t e_phentsize; /* 56 */
+  uint16_t e_phnum;     /* 58 */
+  uint16_t e_shentsize; /* 60 */
+  uint16_t e_shnum;     /* 62 */
+  uint16_t e_shstrndx;  /* 64 */
 } Relf_Elf64_Ehdr;
 
 typedef struct {
@@ -64,17 +65,27 @@ typedef struct {
 
 // Program Header
 typedef struct {
-  uint32_t p_type;
-  uint32_t p_flags;
-  uint64_t p_offset;
-  uint64_t p_vaddr;
-  uint64_t p_paddr;
-  uint64_t p_filesz;
-  uint64_t p_memsz;
-  uint64_t p_align;
+  uint32_t p_type;   /* 4 */
+  uint32_t p_flags;  /* 8 */
+  uint64_t p_offset; /* 16 */
+  uint64_t p_vaddr;  /* 24 */
+  uint64_t p_paddr;  /* 32 */
+  uint64_t p_filesz; /* 40 */
+  uint64_t p_memsz;  /* 48 */
+  uint64_t p_align;  /* 56 */
 } Relf_Elf64_Phdr;
+
+// Program Header Table
+typedef struct {
+  uint16_t phnum; // The number of entries in the program header table
+  union {
+    Relf_Elf64_Phdr *elf64_phdr;
+    // Relf_Elf32_Phdr* elf32_phdr;
+  } phdrs;
+} Relf_Elf64_Phdr_Table;
 
 bool relf_has_valid_magic(const Relf_E_Ident *ident);
 Relf_E_Class relf_ident_class(const Relf_E_Ident *ident);
 Relf_E_Data relf_ident_data(const Relf_E_Ident *ident);
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr);
+void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table);

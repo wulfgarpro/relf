@@ -58,3 +58,17 @@ void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr) {
   printf("e_shnum: 0x%04x\n", ehdr->e_shnum);
   printf("e_shstrndx: 0x%04x\n", ehdr->e_shstrndx);
 }
+
+void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table) {
+  for (int16_t i = 0; i < phdr_table->phnum; i++) {
+    const Relf_Elf64_Phdr phdr = phdr_table->phdrs.elf64_phdr[i];
+    printf("p_type: 0x%08x\n", phdr.p_type);
+    printf("p_flags: 0x%08x\n", phdr.p_flags);
+    printf("p_offset: 0x%016lx\n", phdr.p_offset);
+    printf("p_vaddr: 0x%016lx\n", phdr.p_vaddr);
+    printf("p_paddr: 0x%016lx\n", phdr.p_paddr);
+    printf("p_filesz: 0x%016lx\n", phdr.p_filesz);
+    printf("p_memsz: 0x%016lx\n", phdr.p_memsz);
+    printf("p_align: 0x%016lx\n", phdr.p_align);
+  }
+}
