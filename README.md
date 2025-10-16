@@ -11,3 +11,9 @@ created this project primarily as a learning exercise to deepen my understanding
 cmake -S . -B build -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build --parallel
 ```
+
+## Running `relf`
+
+```sh
+./build/relf /usr/bin/bash
+```
