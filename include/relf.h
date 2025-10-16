@@ -32,13 +32,14 @@ enum {
   EI_CLASS = 4,      // 1 or 2 to signify 32- or 64-bit format.
   EI_DATA = 5,       // 1 or 2 to signify little or big endianness.
   EI_VERSION = 6,    // 1 for original and current version of ELF.
-  EI_OSABI = 7,      // Target OS ABI; 0x00 for System V
-  EI_ABIVERSION = 8, //
-  EI_PAD = 9         //
+  EI_OSABI = 7,      // Target OS ABI
+  EI_ABIVERSION = 8, // ABI version; meaning depends on EI_OSABI.
+                     //   Usually 0 for System V / GNU/Linux.
+  EI_PAD = 9         // Start of padding; zeroed.
 };
 
 typedef struct {
-  u8 e_ident[EI_NIDENT];
+  u8 ident[EI_NIDENT];
 } Relf_E_Ident;
 
 // ELF Header
@@ -112,9 +113,9 @@ typedef struct {
   } shdrs;
 } Relf_Elf64_Shdr_Table;
 
-bool relf_has_valid_magic(const Relf_E_Ident *ident);
-Relf_E_Class relf_ident_class(const Relf_E_Ident *ident);
-Relf_E_Data relf_ident_data(const Relf_E_Ident *ident);
+bool relf_ident_is_elf(const Relf_E_Ident *eid);
+Relf_E_Class relf_ident_class(const Relf_E_Ident *eid);
+Relf_E_Data relf_ident_data(const Relf_E_Ident *eid);
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr);
-void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table);
-void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdr_table);
+void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdrtab);
+void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdrtab);

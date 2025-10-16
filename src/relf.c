@@ -2,16 +2,13 @@
 #include <stdint.h>
 #include <stdio.h>
 
-bool relf_has_valid_magic(const Relf_E_Ident *e_ident) {
-  const u8 *ident = e_ident->e_ident;
-  return ident[EI_MAG0] == 0x7F && ident[EI_MAG1] == 'E' &&
-         ident[EI_MAG2] == 'L' && ident[EI_MAG3] == 'F';
+bool relf_ident_is_elf(const Relf_E_Ident *eid) {
+  return eid->ident[EI_MAG0] == 0x7F && eid->ident[EI_MAG1] == 'E' &&
+         eid->ident[EI_MAG2] == 'L' && eid->ident[EI_MAG3] == 'F';
 }
 
-Relf_E_Class relf_ident_class(const Relf_E_Ident *e_ident) {
-  const u8 *ident = e_ident->e_ident;
-
-  switch (ident[EI_CLASS]) {
+Relf_E_Class relf_ident_class(const Relf_E_Ident *eid) {
+  switch (eid->ident[EI_CLASS]) {
   case 1:
     return RELF_E_CLASS_32;
   case 2:
@@ -21,10 +18,8 @@ Relf_E_Class relf_ident_class(const Relf_E_Ident *e_ident) {
   }
 }
 
-Relf_E_Data relf_ident_data(const Relf_E_Ident *e_ident) {
-  const u8 *ident = e_ident->e_ident;
-
-  switch (ident[EI_DATA]) {
+Relf_E_Data relf_ident_data(const Relf_E_Ident *eid) {
+  switch (eid->ident[EI_DATA]) {
   case 1:
     return RELF_E_DATA_LE;
   case 2:
@@ -35,14 +30,14 @@ Relf_E_Data relf_ident_data(const Relf_E_Ident *e_ident) {
 }
 
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr) {
-  const u8 *ident = ehdr->e_ident.e_ident;
-  printf("e_ident_ei_mag: 0x%02x 0x%02x 0x%02x 0x%02x\n", ident[EI_MAG0],
-         ident[EI_MAG1], ident[EI_MAG2], ident[EI_MAG3]);
-  printf("e_ident_ei_class: 0x%02x\n", ident[EI_CLASS]);
-  printf("e_ident_ei_data: 0x%02x\n", ident[EI_DATA]);
-  printf("e_ident_ei_version: 0x%02x\n", ident[EI_VERSION]);
-  printf("e_ident_ei_osabi: 0x%02x\n", ident[EI_OSABI]);
-  printf("e_ident_ei_abiversion: 0x%02x\n", ident[EI_ABIVERSION]);
+  const u8 *eid = ehdr->e_ident.ident;
+  printf("e_ident_ei_mag: 0x%02x 0x%02x 0x%02x 0x%02x\n", eid[EI_MAG0],
+         eid[EI_MAG1], eid[EI_MAG2], eid[EI_MAG3]);
+  printf("e_ident_ei_class: 0x%02x\n", eid[EI_CLASS]);
+  printf("e_ident_ei_data: 0x%02x\n", eid[EI_DATA]);
+  printf("e_ident_ei_version: 0x%02x\n", eid[EI_VERSION]);
+  printf("e_ident_ei_osabi: 0x%02x\n", eid[EI_OSABI]);
+  printf("e_ident_ei_abiversion: 0x%02x\n", eid[EI_ABIVERSION]);
 
   printf("e_type: 0x%04x\n", ehdr->e_type);
   printf("e_machine: 0x%04x\n", ehdr->e_machine);
@@ -59,9 +54,9 @@ void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr) {
   printf("e_shstrndx: 0x%04x\n", ehdr->e_shstrndx);
 }
 
-void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table) {
-  for (size_t i = 0; i < phdr_table->phnum; i++) {
-    const Relf_Elf64_Phdr *phdr = &phdr_table->phdrs.elf64_phdr[i];
+void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdrtab) {
+  for (size_t i = 0; i < phdrtab->phnum; i++) {
+    const Relf_Elf64_Phdr *phdr = &phdrtab->phdrs.elf64_phdr[i];
     printf("p_type: 0x%08x\n", phdr->p_type);
     printf("p_flags: 0x%08x\n", phdr->p_flags);
     printf("p_offset: 0x%016lx\n", phdr->p_offset);
@@ -73,9 +68,9 @@ void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table) {
   }
 }
 
-void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdr_table) {
-  for (size_t i = 0; i < shdr_table->shnum; i++) {
-    const Relf_Elf64_Shdr *shdr = &shdr_table->shdrs.elf64_shdr[i];
+void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdrtab) {
+  for (size_t i = 0; i < shdrtab->shnum; i++) {
+    const Relf_Elf64_Shdr *shdr = &shdrtab->shdrs.elf64_shdr[i];
     printf("sh_name: 0x%08x\n", shdr->sh_name);
     printf("sh_type: 0x%08x\n", shdr->sh_type);
     printf("sh_flags: 0x%016lx\n", shdr->sh_flags);
