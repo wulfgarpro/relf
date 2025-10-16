@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 ./build.sh
-./build/relf "${1:-./build/relf}"
+./build-debug/relf "${1:-./build-debug/relf}"
