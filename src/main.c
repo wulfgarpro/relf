@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Read Program Header Table
-    uint16_t phentsize = ehdr.ehdr.elf64_ehdr.e_phentsize;
+    u16 phentsize = ehdr.ehdr.elf64_ehdr.e_phentsize;
     if (phentsize != sizeof(Relf_Elf64_Phdr)) {
       fprintf(stderr,
               "ERROR: unexpected 64-bit program header table entry size\n");
@@ -85,9 +85,10 @@ int main(int argc, char *argv[]) {
     fseek(elf_file, ehdr.ehdr.elf64_ehdr.e_phoff, SEEK_SET);
     // TODO: handle error
 
-    uint16_t phnum = ehdr.ehdr.elf64_ehdr.e_phnum;
+    size_t phnum = ehdr.ehdr.elf64_ehdr.e_phnum;
     phdr_table.phnum = phnum;
-    phdr_table.phdrs.elf64_phdr = calloc(phnum, sizeof(Relf_Elf64_Phdr));
+    phdr_table.phdrs.elf64_phdr =
+        calloc(phnum, sizeof(*phdr_table.phdrs.elf64_phdr));
     if (!phdr_table.phdrs.elf64_phdr) {
       fprintf(stderr, "ERROR: allocating memory for program header table\n");
       goto cleanup;
@@ -102,7 +103,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Read Section Header Table
-    uint16_t shentsize = ehdr.ehdr.elf64_ehdr.e_shentsize;
+    u16 shentsize = ehdr.ehdr.elf64_ehdr.e_shentsize;
     if (shentsize != sizeof(Relf_Elf64_Shdr)) {
       fprintf(stderr,
               "ERROR: unexpected 64-bit section header table entry size\n");
@@ -112,9 +113,10 @@ int main(int argc, char *argv[]) {
     fseek(elf_file, ehdr.ehdr.elf64_ehdr.e_shoff, SEEK_SET);
     // TODO: handle error
 
-    uint16_t shnum = ehdr.ehdr.elf64_ehdr.e_shnum;
+    size_t shnum = ehdr.ehdr.elf64_ehdr.e_shnum;
     shdr_table.shnum = shnum;
-    shdr_table.shdrs.elf64_shdr = calloc(shnum, sizeof(Relf_Elf64_Shdr));
+    shdr_table.shdrs.elf64_shdr =
+        calloc(shnum, sizeof(*shdr_table.shdrs.elf64_shdr));
     if (!shdr_table.shdrs.elf64_shdr) {
       fprintf(stderr, "ERROR: allocating memory for section header table\n");
       goto cleanup;

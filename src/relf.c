@@ -3,13 +3,13 @@
 #include <stdio.h>
 
 bool relf_has_valid_magic(const Relf_E_Ident *e_ident) {
-  const uint8_t *ident = e_ident->e_ident;
+  const u8 *ident = e_ident->e_ident;
   return ident[EI_MAG0] == 0x7F && ident[EI_MAG1] == 'E' &&
          ident[EI_MAG2] == 'L' && ident[EI_MAG3] == 'F';
 }
 
 Relf_E_Class relf_ident_class(const Relf_E_Ident *e_ident) {
-  const uint8_t *ident = e_ident->e_ident;
+  const u8 *ident = e_ident->e_ident;
 
   switch (ident[EI_CLASS]) {
   case 1:
@@ -22,7 +22,7 @@ Relf_E_Class relf_ident_class(const Relf_E_Ident *e_ident) {
 }
 
 Relf_E_Data relf_ident_data(const Relf_E_Ident *e_ident) {
-  const uint8_t *ident = e_ident->e_ident;
+  const u8 *ident = e_ident->e_ident;
 
   switch (ident[EI_DATA]) {
   case 1:
@@ -35,7 +35,7 @@ Relf_E_Data relf_ident_data(const Relf_E_Ident *e_ident) {
 }
 
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr) {
-  const uint8_t *ident = ehdr->e_ident.e_ident;
+  const u8 *ident = ehdr->e_ident.e_ident;
   printf("e_ident_ei_mag: 0x%02x 0x%02x 0x%02x 0x%02x\n", ident[EI_MAG0],
          ident[EI_MAG1], ident[EI_MAG2], ident[EI_MAG3]);
   printf("e_ident_ei_class: 0x%02x\n", ident[EI_CLASS]);
@@ -60,31 +60,31 @@ void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr) {
 }
 
 void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdr_table) {
-  for (int16_t i = 0; i < phdr_table->phnum; i++) {
-    const Relf_Elf64_Phdr phdr = phdr_table->phdrs.elf64_phdr[i];
-    printf("p_type: 0x%08x\n", phdr.p_type);
-    printf("p_flags: 0x%08x\n", phdr.p_flags);
-    printf("p_offset: 0x%016lx\n", phdr.p_offset);
-    printf("p_vaddr: 0x%016lx\n", phdr.p_vaddr);
-    printf("p_paddr: 0x%016lx\n", phdr.p_paddr);
-    printf("p_filesz: 0x%016lx\n", phdr.p_filesz);
-    printf("p_memsz: 0x%016lx\n", phdr.p_memsz);
-    printf("p_align: 0x%016lx\n", phdr.p_align);
+  for (size_t i = 0; i < phdr_table->phnum; i++) {
+    const Relf_Elf64_Phdr *phdr = &phdr_table->phdrs.elf64_phdr[i];
+    printf("p_type: 0x%08x\n", phdr->p_type);
+    printf("p_flags: 0x%08x\n", phdr->p_flags);
+    printf("p_offset: 0x%016lx\n", phdr->p_offset);
+    printf("p_vaddr: 0x%016lx\n", phdr->p_vaddr);
+    printf("p_paddr: 0x%016lx\n", phdr->p_paddr);
+    printf("p_filesz: 0x%016lx\n", phdr->p_filesz);
+    printf("p_memsz: 0x%016lx\n", phdr->p_memsz);
+    printf("p_align: 0x%016lx\n", phdr->p_align);
   }
 }
 
 void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdr_table) {
-  for (uint16_t i = 0; i < shdr_table->shnum; i++) {
-    const Relf_Elf64_Shdr shdr = shdr_table->shdrs.elf64_shdr[i];
-    printf("sh_name: 0x%08x\n", shdr.sh_name);
-    printf("sh_type: 0x%08x\n", shdr.sh_type);
-    printf("sh_flags: 0x%016lx\n", shdr.sh_flags);
-    printf("sh_addr: 0x%016lx\n", shdr.sh_addr);
-    printf("sh_offset: 0x%016lx\n", shdr.sh_offset);
-    printf("sh_size: 0x%016lx\n", shdr.sh_size);
-    printf("sh_link: 0x%08x\n", shdr.sh_link);
-    printf("sh_info: 0x%08x\n", shdr.sh_info);
-    printf("sh_addralign: 0x%016lx\n", shdr.sh_addralign);
-    printf("sh_entsize: 0x%016lx\n", shdr.sh_entsize);
+  for (size_t i = 0; i < shdr_table->shnum; i++) {
+    const Relf_Elf64_Shdr *shdr = &shdr_table->shdrs.elf64_shdr[i];
+    printf("sh_name: 0x%08x\n", shdr->sh_name);
+    printf("sh_type: 0x%08x\n", shdr->sh_type);
+    printf("sh_flags: 0x%016lx\n", shdr->sh_flags);
+    printf("sh_addr: 0x%016lx\n", shdr->sh_addr);
+    printf("sh_offset: 0x%016lx\n", shdr->sh_offset);
+    printf("sh_size: 0x%016lx\n", shdr->sh_size);
+    printf("sh_link: 0x%08x\n", shdr->sh_link);
+    printf("sh_info: 0x%08x\n", shdr->sh_info);
+    printf("sh_addralign: 0x%016lx\n", shdr->sh_addralign);
+    printf("sh_entsize: 0x%016lx\n", shdr->sh_entsize);
   }
 };

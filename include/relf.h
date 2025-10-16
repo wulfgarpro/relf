@@ -7,6 +7,11 @@
 // Number of bytes in e_ident.
 #define EI_NIDENT 16
 
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
+
 typedef enum {
   RELF_E_CLASS_NONE = 0,
   RELF_E_CLASS_32 = 1,
@@ -33,25 +38,25 @@ enum {
 };
 
 typedef struct {
-  uint8_t e_ident[EI_NIDENT];
+  u8 e_ident[EI_NIDENT];
 } Relf_E_Ident;
 
 // ELF Header
 typedef struct {
   Relf_E_Ident e_ident; /* 16 */
-  uint16_t e_type;      /* 18 */
-  uint16_t e_machine;   /* 20 */
-  uint32_t e_version;   /* 24 */
-  uint64_t e_entry;     /* 32 */
-  uint64_t e_phoff;     /* 40 */
-  uint64_t e_shoff;     /* 48 */
-  uint32_t e_flags;     /* 52 */
-  uint16_t e_ehsize;    /* 54 */
-  uint16_t e_phentsize; /* 56 */
-  uint16_t e_phnum;     /* 58 */
-  uint16_t e_shentsize; /* 60 */
-  uint16_t e_shnum;     /* 62 */
-  uint16_t e_shstrndx;  /* 64 */
+  u16 e_type;           /* 18 */
+  u16 e_machine;        /* 20 */
+  u32 e_version;        /* 24 */
+  u64 e_entry;          /* 32 */
+  u64 e_phoff;          /* 40 */
+  u64 e_shoff;          /* 48 */
+  u32 e_flags;          /* 52 */
+  u16 e_ehsize;         /* 54 */
+  u16 e_phentsize;      /* 56 */
+  u16 e_phnum;          /* 58 */
+  u16 e_shentsize;      /* 60 */
+  u16 e_shnum;          /* 62 */
+  u16 e_shstrndx;       /* 64 */
 } Relf_Elf64_Ehdr;
 
 typedef struct {
@@ -65,19 +70,19 @@ typedef struct {
 
 // Program Header
 typedef struct {
-  uint32_t p_type;   /* 4 */
-  uint32_t p_flags;  /* 8 */
-  uint64_t p_offset; /* 16 */
-  uint64_t p_vaddr;  /* 24 */
-  uint64_t p_paddr;  /* 32 */
-  uint64_t p_filesz; /* 40 */
-  uint64_t p_memsz;  /* 48 */
-  uint64_t p_align;  /* 56 */
+  u32 p_type;   /* 4 */
+  u32 p_flags;  /* 8 */
+  u64 p_offset; /* 16 */
+  u64 p_vaddr;  /* 24 */
+  u64 p_paddr;  /* 32 */
+  u64 p_filesz; /* 40 */
+  u64 p_memsz;  /* 48 */
+  u64 p_align;  /* 56 */
 } Relf_Elf64_Phdr;
 
 // Program Header Table
 typedef struct {
-  uint16_t phnum; // The number of entries in the program header table
+  size_t phnum;
   union {
     Relf_Elf64_Phdr *elf64_phdr;
     // Relf_Elf32_Phdr* elf32_phdr;
@@ -86,22 +91,21 @@ typedef struct {
 
 // Section Header
 typedef struct {
-  uint32_t sh_name;      /* 4 */
-  uint32_t sh_type;      /* 8 */
-  uint64_t sh_flags;     /* 16 */
-  uint64_t sh_addr;      /* 24 */
-  uint64_t sh_offset;    /* 32 */
-  uint64_t sh_size;      /* 40 */
-  uint32_t sh_link;      /* 44 */
-  uint32_t sh_info;      /* 48 */
-  uint64_t sh_addralign; /* 56 */
-  uint64_t sh_entsize;   /* 64 */
-
+  u32 sh_name;      /* 4 */
+  u32 sh_type;      /* 8 */
+  u64 sh_flags;     /* 16 */
+  u64 sh_addr;      /* 24 */
+  u64 sh_offset;    /* 32 */
+  u64 sh_size;      /* 40 */
+  u32 sh_link;      /* 44 */
+  u32 sh_info;      /* 48 */
+  u64 sh_addralign; /* 56 */
+  u64 sh_entsize;   /* 64 */
 } Relf_Elf64_Shdr;
 
-// Section Header
+// Section Header Table
 typedef struct {
-  uint16_t shnum;
+  size_t shnum;
   union {
     Relf_Elf64_Shdr *elf64_shdr;
     // Relf_Elf32_Shdr* elf32_shdr;
