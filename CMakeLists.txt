@@ -4,6 +4,7 @@ project(relf C)
 
 add_executable(
   relf
+  src/cli.c
   src/relf.c
   src/main.c
 )
