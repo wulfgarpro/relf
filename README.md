@@ -15,5 +15,10 @@ cmake --build build --parallel
 ## Running `relf`
 
 ```sh
-./build/relf /usr/bin/bash
+❯ ./relf --help
+usage: ./build/relf [OPTION]... <input>
+  -h, --file-header
+  -l, --program-headers, --segments
+  -S, --section-headers, --sections
+  -H, --help
 ```
