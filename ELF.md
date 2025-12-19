@@ -1,6 +1,6 @@
 # ELF
 
-- <https://www.cs.cmu.edu/afs/cs/academic/class/15213-f00/docs/elf.pdf>
+- <https://refspecs.linuxfoundation.org/elf/elf.pdf>
 - <https://en.wikipedia.org/wiki/Executable_and_Linkable_Format>
 - <https://llvm.org/doxygen/BinaryFormat_2ELF_8h_source.html>
 
