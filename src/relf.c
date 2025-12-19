@@ -1,6 +1,7 @@
 #include "relf.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 bool relf_ident_is_elf(const Relf_E_Ident *eid) {
   return eid->ident[EI_MAG0] == 0x7F && eid->ident[EI_MAG1] == 'E' &&
@@ -82,4 +83,20 @@ void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdrtab) {
     printf("sh_addralign: 0x%016lx\n", shdr->sh_addralign);
     printf("sh_entsize: 0x%016lx\n", shdr->sh_entsize);
   }
-};
+}
+
+void relf_pht64_destroy(Relf_Elf64_Phdr_Table *phdrtab) {
+  if (!phdrtab)
+    return;
+  free(phdrtab->phdrs.elf64_phdr);
+  phdrtab->phdrs.elf64_phdr = NULL;
+  phdrtab->phnum = 0;
+}
+
+void relf_sht64_destroy(Relf_Elf64_Shdr_Table *shdrtab) {
+  if (!shdrtab)
+    return;
+  free(shdrtab->shdrs.elf64_shdr);
+  shdrtab->shdrs.elf64_shdr = NULL;
+  shdrtab->shnum = 0;
+}

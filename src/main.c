@@ -5,22 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-static inline void relf_pht64_free(Relf_Elf64_Phdr_Table *phdrtab) {
-  if (!phdrtab)
-    return;
-  free(phdrtab->phdrs.elf64_phdr);
-  phdrtab->phdrs.elf64_phdr = NULL;
-  phdrtab->phnum = 0;
-}
-
-static inline void relf_sht64_free(Relf_Elf64_Shdr_Table *shdrtab) {
-  if (!shdrtab)
-    return;
-  free(shdrtab->shdrs.elf64_shdr);
-  shdrtab->shdrs.elf64_shdr = NULL;
-  shdrtab->shnum = 0;
-}
-
 int main(int argc, char *argv[]) {
   int rc = EXIT_FAILURE;
   FILE *fd = NULL;
@@ -169,8 +153,8 @@ cleanup:
   if (fd) {
     fclose(fd);
   }
-  relf_pht64_free(&phdrtab);
-  relf_sht64_free(&shdrtab);
+  relf_pht64_destroy(&phdrtab);
+  relf_sht64_destroy(&shdrtab);
 
   return rc;
 }

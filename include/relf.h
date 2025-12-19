@@ -119,3 +119,5 @@ Relf_E_Data relf_ident_data(const Relf_E_Ident *eid);
 void relf_print_elf64_header(const Relf_Elf64_Ehdr *ehdr);
 void relf_print_elf64_phdr_table(const Relf_Elf64_Phdr_Table *phdrtab);
 void relf_print_elf64_shdr_table(const Relf_Elf64_Shdr_Table *shdrtab);
+void relf_pht64_destroy(Relf_Elf64_Phdr_Table *phdrtab);
+void relf_sht64_destroy(Relf_Elf64_Shdr_Table *shdrtab);
